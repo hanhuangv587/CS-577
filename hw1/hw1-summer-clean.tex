@@ -382,25 +382,25 @@ A standard deck of 52 cards has 4 suits, and each suit has card number 1 (ace) t
   \part
   A royal flush: all 5 cards have the same suit and are 10, jack, queen, king, ace.
   \begin{solutionbox}{0.5in}
-
+    4
   \end{solutionbox}
 
   \part
   A straight flush: all 5 cards have the same suit and are in sequence, but not a royal flush.
   \begin{solutionbox}{0.8in}
-
+    $4 \times 10 - 4 = 36$
   \end{solutionbox}
   
   \part
   A flush: all 5 cards have the same suit, but not a royal or straight flush.
   \begin{solutionbox}{0.8in}
-
+    $4 \times {13 \choose 5} - 4 - 36 = 5108$
   \end{solutionbox}
 
   \part
   Only one pair (2 of the 5 cards have the same number/rank, while the remaining 3 cards all have different numbers/ranks):
   \begin{solutionbox}{0.8in}
-
+    $13 \times {4 \choose 2} \times {12 \choose 3} \times 4^3 = 1098240$
   \end{solutionbox}
   
 \end{parts}
@@ -415,20 +415,34 @@ Show that $2x$ is even for all $x \in \mathbb{N}$.
   \part
   By direct proof.
   \begin{solutionbox}{2in}
-
+    Let $x \in \mathbb{N}$. \\
+    Then $2x / 2 = x \in \mathbb{N}$. \\
+    Thus $2x$ is even.
   \end{solutionbox}
   
   \part
   By contradiction.
     \begin{solutionbox}{2in}
-
+    Assume $2x$ is odd. \\
+    Then $2x = 2k + 1$ for some $k \in \mathbb{N}$. \\
+    But $2x / 2 = x = k + 1/2 \notin \mathbb{N}$. \\
+    Thus $2x$ is even.
     \end{solutionbox}
   \end{parts}
 
 \question
 For all $x,y \in \mathbb{R}$, show that $|x + y| \le |x| + |y|$. (Hint: use proof by cases.)
 \begin{solutionbox}{3in}
-  
+  Let $x,y \in \mathbb{R}$. \\
+  Note that $|x| \ge x$ and $|x| \ge -x$, and similarly for $y$. \\
+  Consider the following cases: \\
+  \begin{itemize}
+    \item $x + y \ge 0$ \\
+      Then $|x + y| = x + y \le |x| + |y|$. 
+    \item $x + y < 0$ \\
+      Then $|x + y| = -(x + y) = -x - y \le |x| + |y|$.
+  \end{itemize}
+  Thus $|x + y| \le |x| + |y|$.
 \end{solutionbox}
 
 \section*{Program Correctness (and Invariants)}
@@ -453,7 +467,24 @@ For the following algorithms, describe the loop invariant(s) and prove that they
     }
     \caption{findMin}
   \end{algorithm}
-  \begin{solutionbox}{5.9in} 
+  \begin{solutionbox}{5.9in}
+    For the loop invariant, we use the following: \\ 
+    \begin{itemize}
+      \item \textbf{Initialization}: \\
+        Before the first iteration, $min = \infty$. \\
+        Thus $min$ is the smallest element in the array.
+      \item \textbf{Maintenance}: \\
+        Assume $min$ is the smallest element in the array before the $i$th iteration. \\
+        Then $min \le a[i]$. \\
+        After the $i$th iteration, $min$ is updated to $a[i]$ if $a[i] < min$. \\
+        Thus $min$ is the smallest element in the array after the $i$th iteration.
+      \item \textbf{Termination}: \\
+        The loop terminates when $i = $ len($a$) + 1. \\
+        By the maintenance property, $min$ is the smallest element in the array. \\
+        Thus $min$ is the smallest element in the array.
+    \end{itemize}
+    For soundness, we have shown that the loop invariant holds before the first iteration, and that if it holds before an iteration, it holds after the iteration. \\
+    For completeness, we have shown that if the loop terminates, the loop invariant holds for all inputs $a$.
   \end{solutionbox}
 
     \part 
@@ -478,6 +509,19 @@ For the following algorithms, describe the loop invariant(s) and prove that they
     \caption{InsertionSort}
   \end{algorithm}
   \begin{solutionbox}{5.9in}
+    \begin{itemize}
+      \item \textbf{Sound}: \\
+        The loop invariant is that $a[1..i-1]$ is sorted from largest to smallest. \\
+        This is true before the first iteration of the outer loop, since $a[1]$ is trivially sorted. \\
+        Now assume that $a[1..i-2]$ is sorted from largest to smallest. \\
+        Then the inner loop shifts $a[j..i-1]$ to $a[j+1..i]$ until $a[j] \ge val$. \\
+        Thus $a[1..i-1]$ is sorted from largest to smallest. \\
+
+      \item \textbf{Complete}: \\
+        The loop terminates when $j = 1$ and $a[j] \ge val$. \\
+        Thus $a[1..i]$ is sorted from largest to smallest. \\
+        Since $i$ is incremented after each iteration of the outer loop, the algorithm terminates with $a[1..len(a)]$ sorted from largest to smallest for all inputs $a$.
+    \end{itemize}
   \end{solutionbox}
   
 \end{parts}
@@ -492,30 +536,36 @@ Solve the following recurrences.
   $c_0 = 1; c_{n} = c_{n-1} + 4$
 
   \begin{solutionbox}{3.7in}
+    $c_n = c_{n-1} + 4 = c_{n-2} + 4 + 4 = c_{n-3} + 4 + 4 + 4 = \ldots = c_0 + 4n = 1 + 4n$
   \end{solutionbox}
 
   \part
   $d_0 = 4; d_{n} = 3 \cdot d_{n-1} $
 
   \begin{solutionbox}{3.7in}
+    $d_n = 3 \cdot d_{n-1} = 3 \cdot 3 \cdot d_{n-2} = 3^2 \cdot 3 \cdot d_{n-3} = \ldots = 3^n \cdot 4$
   \end{solutionbox}
 
   \part
   $T(1) = 1; T(n) = 2T(n/2) + n$ (An upper bound is sufficient.)
 
-  \begin{solutionbox}{3.9in}
-
-
+  \begin{solutionbox}{3.9in} \\
+    $T(n) = 2T(n/2) + n = 2(2T(n/4) + n/2) + n = 2^2T(n/2^2) + 2n = \ldots = 2^kT(n/2^k) + kn$ \\
+    $n/2^k = 1 \implies k = \log_2 n$ \\
+    $T(n) = 2^{\log_2 n}T(1) + n\log_2 n = n + n\log_2 n = O(n\log n)$
   \end{solutionbox}
 
   \part
   $f(1) = 1; f(n) = \sum_{1}^{n-1}\left(i \cdot f(i)\right)$\\ (Hint: compute $f(n+1)-f(n)$ for $n>1$)
 
-  \begin{solutionbox}{3.9in}
-
+  \begin{solutionbox}{3.9in} \\
+    $f(2) = \sum_{1}^{1}\left(i \cdot f(i)\right) = 1 \cdot f(1) = 1$ \\
+    $f(n+1) - f(n) = \sum_{1}^{n}\left(i \cdot f(i)\right) - \sum_{1}^{n-1}\left(i \cdot f(i)\right) = n \cdot f(n)$ \\
+    $f(n+1) - f(n) = n \cdot f(n) $ \\
+    $f(n+1) = (n+1) \cdot f(n) $ \\
+    $f(n+1) = (n+1) \cdot n \cdot f(n-1) = (n+1) \cdot n \cdot (n-1) \cdot f(n-2) = \ldots = (n+1)! / 2$ \\
+    $f(n) = n! / 2$
   \end{solutionbox}
-
-  
 \end{parts}
 
 \section*{Coding Question: Hello World}
@@ -561,6 +611,7 @@ Hello, Owen!
   $f_5(n) = 100n$ \\
   $f_6(n) = n^2 \log{n}$
   \begin{solutionbox}{1in} \vspace{1em} \\
+    $f_2(n), f_3(n), f_4(n), f_5(n), f_6(n), f_1(n)$
   \end{solutionbox}
   
   \part
@@ -573,6 +624,7 @@ Hello, Owen!
   $g_7(n) = 2^{(n^2)}$
   \nopagebreak
   \begin{solutionbox}{1in} \vspace{1em} \\
+    $g_1(n), g_3(n), g_4(n), g_5(n), g_2(n), g_7(n), g_6(n)$
   \end{solutionbox}
   
 \end{parts}
@@ -586,6 +638,12 @@ Hello, Owen!
   $\log_2{f(n)}$ is $O(\log_2{g(n)})$ 
 
   \begin{solutionbox}{2.5in} \vspace{1em} \\
+    True. \\
+    $f(n)$ is $O(g(n))$ \\
+    $f(n) \leq c \cdot g(n)$ \\
+    $\log_2{f(n)} \leq \log_2{c \cdot g(n)}$ \\
+    $\log_2{f(n)} \leq \log_2{c} + \log_2{g(n)}$ \\
+    $\log_2{f(n)}$ is $O(\log_2{g(n)})$ \\
   \end{solutionbox}
   
     \part 
@@ -593,6 +651,12 @@ Hello, Owen!
     
     \nopagebreak
     \begin{solutionbox}{2in} \vspace{1em}                                                           \\
+      True. \\
+      $f(n)$ is $O(g(n))$ \\
+      $f(n) \leq c \cdot g(n)$ \\
+      $2^{f(n)} \leq 2^{c \cdot g(n)}$ \\
+      $2^{f(n)} \leq 2^{c} \cdot 2^{g(n)}$ \\
+      $2^{f(n)}$ is $O(2^{g(n)})$ \\
     \end{solutionbox}
 
 \part
@@ -600,6 +664,11 @@ Hello, Owen!
     
     \nopagebreak
     \begin{solutionbox}{2in} \vspace{1em} \\
+      True. \\
+      $f(n)$ is $O(g(n))$ \\
+      $f(n) \leq c \cdot g(n)$ , $f(n) \geq 0$ , $g(n) \geq 0$ \\
+      $f(n)^2 \leq c^2 \cdot g(n)^2$ \\
+      $f(n)^2$ is $O(g(n)^2)$ \\
   \end{solutionbox}
   
 \end{parts}
@@ -622,19 +691,27 @@ endfor
 
 \part For some function $f$ that you should choose, give a bound of the form $O(f(n))$ on the running time of this algorithm on an input of size $n$ (i.e., a bound on the number of operations performed by the algorithm).
 
-\begin{solutionbox}{0.65in}    \vspace{1em}     \\
-
+\begin{solutionbox}{0.65in}    \vspace{1em}     
+  For each $i$, the inner loop runs $n-i$ times. \\
+  $T(n) = \sum_{i=1}^{n} (n-i) = \sum_{i=1}^{n} n - \sum_{i=1}^{n} i = n^2 - \frac{n(n+1)}{2} = \frac{n(n-1)}{2} = O(n^2)$ \\
 \end{solutionbox}
 
 \part For this same function $f$, show that the running time of the algorithm on an input of size $n$ is also $\Omega(f(n))$. (This shows an asympto tically tight bound of $\Theta(f(n))$ on the running time.)
 
 \begin{solutionbox}{1.25in}    \vspace{1em}     \\
-
+  For each $i$, the inner loop runs $n-i$ times. \\
+  $T(n) = \sum_{i=1}^{n} (n-i) = \sum_{i=1}^{n} n - \sum_{i=1}^{n} i = n^2 - \frac{n(n+1)}{2} = \frac{n(n-1)}{2} = \Omega(n^2)$ \\
 \end{solutionbox}
 
 \part Although the algorithm provided is the most natural way to solve the problem, it contains some highly unnecessary sources of inefficiency. Give a different algorithm to solve this problem, with an asymptotically better running time. In other words, you should design an algorithm with running time $O(g(n))$, where $\lim_{n \to \infty}{\frac{g(n)}{f(n)}} = 0$. 
 
 \begin{solutionbox}{2.95in}    \vspace{1em}     \\
+  Let $S$ be an array of size $n$ where $S[i] = \sum_{j=1}^{i} A[j]$ \\
+  $S[1] = A[1]$ \\
+  $S[i] = S[i-1] + A[i]$ \\
+  $B[i,j] = S[j] - S[i-1]$ \\
+  $T(n) = n + 1 = O(n)$ \\
+  This algorithm is $O(n)$ and satisfies the requirements. \\
 \end{solutionbox}
 
 \end{parts}
@@ -664,6 +741,7 @@ endfor
    1, [2, 9], [3, 5, 6, 8] , [4, 7]   \\
 
   Depth-First Search: not an exhaustive list of solutions \\
+  Some possible solutions: \\
    1, 9, 8, 2, 3, 7, 6, 4, 5 \\
    1, 2, 3, 7, 6, 4, 5, 9, 8 \\
    1, 2, 6, 4, 5, 3, 7, 9, 8
@@ -674,8 +752,16 @@ endfor
 
 \nopagebreak
 
-\begin{solutionbox}{5in}    \vspace{1em}                                                            
-
+\begin{solutionbox}{5in}    \vspace{1em}    \\                                                        
+  \textbf{Base Case:} \\
+  A tree with one node has no leaves and no nodes with two children. \\
+  \textbf{Inductive Hypothesis:} \\
+  Assume that for a tree with $n$ nodes, the number of nodes with two children is exactly one less than the number of leaves. \\
+  \textbf{Inductive Step:} \\
+  Consider a tree with $n+1$ nodes. Let us add a node to the tree with $n$ nodes. \\
+  If we add to a leaf, then the number of leaves and nodes with two children both stay the same. \\
+  If we add to a node with one child, then the number of leaves and nodes with two children both increase by one. \\
+  Thus the number of nodes with two children is still one less than the number of leaves. \\
 \end{solutionbox}
 \pagebreak
 \question \textit{Kleinberg, Jon. Algorithm Design (p. 108, q. 7).} Some friends of yours work on wireless networks, and they're currently studying the properties of a network of $n$ mobile devices. As the devices move around, they define a graph at any point in time as follows: 
@@ -693,8 +779,13 @@ Here’s a concrete way to formulate the question as a claim about graphs.\\
 
 Decide whether you think the claim is true or false, and give a proof of either the claim or its negation. 
 
-\begin{solutionbox}{4.5in} \vspace{1em}    
-
+\begin{solutionbox}{4.5in} \vspace{1em}    \\
+  \textbf{Claim: Let $G$ be a graph on $n$ nodes, where $n$ is an even number. If every node of $G$ has degree at least $\frac{n}{2}$, then $G$ is connected.} \\
+  \textbf{Proof:} \\
+  Assume that $G$ is not connected. \\
+  Then there exists a node $v$ such that there is no path from $v$ to some other node $u$. \\
+  Since $G$ is not connected, there must be at least one other node $w$ such that there is no path from $w$ to $u$. \\
+  
   \end{solutionbox}
 
 \pagebreak

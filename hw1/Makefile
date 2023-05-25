@@ -30,5 +30,5 @@ build:
 #	./source_file
 
 run:
-	python3 source_file.py
+	python3 DFS.py
 
